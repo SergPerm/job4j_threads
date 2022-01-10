@@ -7,11 +7,16 @@ public class ThreadStop {
                     int count = 0;
                     while (!Thread.currentThread().isInterrupted()) {
                         System.out.println(count++);
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
         );
         thread.start();
-        Thread.sleep(1000);
+        Thread.sleep(10000);
         thread.interrupt();
     }
 }
