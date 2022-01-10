@@ -12,13 +12,18 @@ public class ConsoleProgress implements Runnable {
             if (count == 4) {
                 count = 0;
             }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
         Thread progress = new Thread(new ConsoleProgress());
         progress.start();
-        Thread.sleep(3000);
+        Thread.sleep(5000);
         progress.interrupt();
     }
 }
