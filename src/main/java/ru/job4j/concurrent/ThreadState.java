@@ -1,9 +1,7 @@
 package ru.job4j.concurrent;
 
-import javax.swing.plaf.TableHeaderUI;
-
 public class ThreadState {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Thread thread1 = new Thread(
                 () -> System.out.println(Thread.currentThread().getName())
         );
@@ -12,9 +10,12 @@ public class ThreadState {
         );
         thread1.start();
         thread2.start();
-        thread1.join();
-        thread2.join();
-
+        while (true) {
+            if (thread1.getState() == Thread.State.TERMINATED
+                    && thread2.getState() == Thread.State.TERMINATED) {
+                break;
+            }
+        }
         System.out.println("" + thread1.getName() + " is " + thread1.getState()
                 + ", " + thread2.getName() + " is " + thread2.getState());
     }
