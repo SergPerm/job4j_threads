@@ -10,11 +10,9 @@ public class ThreadState {
         );
         thread1.start();
         thread2.start();
-        while (true) {
-            if (thread1.getState() == Thread.State.TERMINATED
-                    && thread2.getState() == Thread.State.TERMINATED) {
-                break;
-            }
+        while (thread1.getState() != Thread.State.TERMINATED
+                && thread2.getState() != Thread.State.TERMINATED) {
+            System.out.println("\rThreads is work");
         }
         System.out.println("" + thread1.getName() + " is " + thread1.getState()
                 + ", " + thread2.getName() + " is " + thread2.getState());
