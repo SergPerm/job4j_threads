@@ -11,8 +11,8 @@ public class ThreadState {
         thread1.start();
         thread2.start();
         while (thread1.getState() != Thread.State.TERMINATED
-                && thread2.getState() != Thread.State.TERMINATED) {
-            System.out.println("\rThreads is work");
+                || thread2.getState() != Thread.State.TERMINATED) {
+            System.out.println("Threads is work");
         }
         System.out.println("" + thread1.getName() + " is " + thread1.getState()
                 + ", " + thread2.getName() + " is " + thread2.getState());
