@@ -28,16 +28,16 @@ public class Wget implements Runnable {
         String nameRes = Arrays.stream(url.split("/")).reduce((first, second) -> second).get();
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(nameRes)) {
-            byte[] dataBuffer = new byte[2048];
+            byte[] dataBuffer = new byte[1024];
             int bytesRead;
             long byteWrite = 0;
             Instant start = Instant.now();
-            while ((bytesRead = in.read(dataBuffer, 0, 2048)) != -1) {
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 byteWrite += bytesRead;
                 if (byteWrite >= speed) {
                     Instant finish = Instant.now();
-                    long delay = 5000L - Duration.between(start, finish).toMillis();
+                    long delay = 1000L - Duration.between(start, finish).toMillis();
                     System.out.println(delay);
                     start = finish;
                     byteWrite = 0;
