@@ -3,10 +3,12 @@ package ru.job4j.concurrent;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
 
 /**
  * int speed - количество Mb в секунду.
@@ -25,7 +27,15 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         Instant startAll = Instant.now();
-        String nameRes = Arrays.stream(url.split("/")).reduce((first, second) -> second).get();
+        String nameRes = null;
+        try {
+            nameRes = Paths.get(new URI(url).getPath()).getFileName().toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        if (nameRes == null) {
+            nameRes = "unknownName.dat";
+        }
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(nameRes)) {
             byte[] dataBuffer = new byte[1024];
@@ -37,14 +47,14 @@ public class Wget implements Runnable {
                 byteWrite += bytesRead;
                 if (byteWrite >= speed) {
                     Instant finish = Instant.now();
-                    long delay = 1000L - Duration.between(start, finish).toMillis();
-                    System.out.println(delay);
-                    start = finish;
+                    long duration = Duration.between(start, finish).toMillis();
+                    System.out.println(duration);
                     byteWrite = 0;
-                    if (delay > 0) {
+                    if (duration < 1000) {
                         System.out.println("delay");
-                        Thread.sleep(delay);
+                        Thread.sleep(1000 - duration);
                     }
+                    start = Instant.now();
                 }
             }
             Instant finishAll = Instant.now();
@@ -64,7 +74,7 @@ public class Wget implements Runnable {
     }
 
     private static void validate(int argsLength) {
-        if (argsLength < 2) {
+        if (argsLength != 2) {
             throw new IllegalArgumentException("");
         }
     }
