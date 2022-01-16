@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 /**
- * int speed - количество Mb в секунду.
+ * int speed - количество байт в секунду.
  */
 
 public class Wget implements Runnable {
@@ -21,7 +21,7 @@ public class Wget implements Runnable {
 
     public Wget(String url, int speed) {
         this.url = url;
-        this.speed = speed * 1024 * 1024;
+        this.speed = speed;
     }
 
     @Override
