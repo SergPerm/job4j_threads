@@ -14,14 +14,13 @@ public class UserStore implements Storage {
 
     @Override
     public synchronized boolean add(User user) {
-        users.putIfAbsent(user.getId(), user);
-        return users.containsValue(user);
+        User tmp = users.putIfAbsent(user.getId(), user);
+        return tmp == null;
     }
 
     @Override
     public synchronized boolean delete(User user) {
-        users.remove(user.getId());
-        return !users.containsValue(user);
+        return users.remove(user.getId(), user);
     }
 
     @Override
@@ -35,8 +34,8 @@ public class UserStore implements Storage {
         if (userFrom == null || userFrom.getAmount() < amount || userTo == null) {
             return false;
         }
-        userFrom.decrease(amount);
-        userTo.increase(amount);
+        userFrom.setAmount(userFrom.getAmount() - amount);
+        userTo.setAmount(userTo.getAmount() + amount);
         return true;
     }
 }

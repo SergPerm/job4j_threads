@@ -18,11 +18,7 @@ public class User {
         return amount;
     }
 
-    public void increase(int amount) {
-        this.amount += amount;
-    }
-
-    public void decrease(int amount) {
-        this.amount -= amount;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }
