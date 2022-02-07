@@ -1,4 +1,4 @@
-package ru.job4j.cache;
+package ru.job4j.nonblocking.cache;
 
 import java.util.HashMap;
 import java.util.Map;

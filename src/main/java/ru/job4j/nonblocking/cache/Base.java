@@ -1,4 +1,4 @@
-package ru.job4j.cache;
+package ru.job4j.nonblocking.cache;
 
 public class Base {
     private final int id;
