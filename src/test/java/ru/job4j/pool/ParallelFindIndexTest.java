@@ -8,13 +8,13 @@ public class ParallelFindIndexTest {
 
     @Test
     public void findIndex() {
-        int[] array = new int[] {2, 10, 48, 95, 7, 12, 7, 68, 4, 100, 1, -4, 8, -8};
+        Integer[] array = new Integer[] {2, 10, 48, 95, 7, 12, 7, 68, 4, 100, 1, -4, 8, -8};
         assertThat(3, is(ParallelFindIndex.findIndex(95, array)));
     }
 
     @Test
     public void findIndexSmallArray() {
-        int[] array = new int[] {2, 10, 48, 95, 7, 12, 7, 68, 4, 100};
+        Integer[] array = new Integer[] {2, 10, 48, 95, 7, 12, 7, 68, 4, 100};
         assertThat(3, is(ParallelFindIndex.findIndex(95, array)));
     }
 }

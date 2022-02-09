@@ -3,13 +3,13 @@ package ru.job4j.pool;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-public class ParallelFindIndex extends RecursiveTask<Integer> {
-    private final int[] array;
+public class ParallelFindIndex<T> extends RecursiveTask<Integer> {
+    private final T[] array;
     private final int from;
     private final int to;
-    private final int value;
+    private final T value;
 
-    public ParallelFindIndex(int value, int[] array, int from, int to) {
+    public ParallelFindIndex(T value, T[] array, int from, int to) {
         this.value = value;
         this.array = array;
         this.from = from;
@@ -18,15 +18,12 @@ public class ParallelFindIndex extends RecursiveTask<Integer> {
 
     @Override
     protected Integer compute() {
+        if ((to - from) <= 10) {
+            return findIndexSmallArray(value, array);
+        }
         int mid = (from + to) / 2;
-        if (array[mid] == value) {
-            return mid;
-        }
-        if (from == to) {
-            return -1;
-        }
-        ParallelFindIndex left = new ParallelFindIndex(value, array, from, mid);
-        ParallelFindIndex right = new ParallelFindIndex(value, array, mid + 1, to);
+        ParallelFindIndex<T> left = new ParallelFindIndex<>(value, array, from, mid);
+        ParallelFindIndex<T> right = new ParallelFindIndex<>(value, array, mid + 1, to);
         left.fork();
         right.fork();
         Integer aLeft = left.join();
@@ -34,17 +31,14 @@ public class ParallelFindIndex extends RecursiveTask<Integer> {
         return aLeft != -1 ? aLeft : aRight;
     }
 
-    public static Integer findIndex(int value, int[] array) {
-        if (array.length <= 10) {
-            return ParallelFindIndex.findIndexSmallArray(value, array);
-        }
+    public static <T> Integer findIndex(T value, T[] array) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        return forkJoinPool.invoke(new ParallelFindIndex(value, array, 0, array.length - 1));
+        return forkJoinPool.invoke(new ParallelFindIndex<>(value, array, 0, array.length - 1));
     }
 
-    private static Integer findIndexSmallArray(int value, int[] array) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == value) {
+    private Integer findIndexSmallArray(T value, T[] array) {
+        for (int i = from; i <= to; i++) {
+            if (array[i].equals(value)) {
                 return i;
             }
         }
